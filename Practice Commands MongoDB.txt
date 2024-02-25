@@ -1,0 +1,81 @@
+Microsoft Windows [Version 10.0.22631.3155]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\Sudarshan Ingole>mongosh
+Current Mongosh Log ID: 65db46938e07beda7fc7a468
+Connecting to:          mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.1.4
+Using MongoDB:          7.0.5
+Using Mongosh:          2.1.4
+
+For mongosh info see: https://docs.mongodb.com/mongodb-shell/
+
+------
+   The server generated these startup warnings when booting
+   2024-02-14T16:54:43.375+05:30: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+------
+
+test> use practice
+switched to db practice
+practice> db.collection.insertOne({ key: "value" });
+{
+  acknowledged: true,
+  insertedId: ObjectId('65db474d8e07beda7fc7a469')
+}
+practice> db.collection.find({ key: "value" });
+[ { _id: ObjectId('65db474d8e07beda7fc7a469'), key: 'value' } ]
+practice> db.collection.updateOne({ key: "value" }, { $set: { newKey: "newValue" } });
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+practice> db.collection.aggregate([
+...   { $group: { _id: "$key", total: { $sum: 1 } } }
+... ]);
+[ { _id: 'value', total: 1 } ]
+practice> db.collection.insertMany([
+...   { key1: "value1" },
+...   { key2: "value2" },
+...   { key3: "value3" }
+... ]);
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('65db47b28e07beda7fc7a46a'),
+    '1': ObjectId('65db47b28e07beda7fc7a46b'),
+    '2': ObjectId('65db47b28e07beda7fc7a46c')
+  }
+}
+practice> db.collection.find({ key: "value" });
+[
+  {
+    _id: ObjectId('65db474d8e07beda7fc7a469'),
+    key: 'value',
+    newKey: 'newValue'
+  }
+]
+practice> db.collection.find().sort({ key: 1 }); // Sort in ascending order
+[
+  { _id: ObjectId('65db47b28e07beda7fc7a46a'), key1: 'value1' },
+  { _id: ObjectId('65db47b28e07beda7fc7a46b'), key2: 'value2' },
+  { _id: ObjectId('65db47b28e07beda7fc7a46c'), key3: 'value3' },
+  {
+    _id: ObjectId('65db474d8e07beda7fc7a469'),
+    key: 'value',
+    newKey: 'newValue'
+  }
+]
+practice> db.collection.find().sort({ key: -1 }); // Sort in descending order
+[
+  {
+    _id: ObjectId('65db474d8e07beda7fc7a469'),
+    key: 'value',
+    newKey: 'newValue'
+  },
+  { _id: ObjectId('65db47b28e07beda7fc7a46a'), key1: 'value1' },
+  { _id: ObjectId('65db47b28e07beda7fc7a46b'), key2: 'value2' },
+  { _id: ObjectId('65db47b28e07beda7fc7a46c'), key3: 'value3' }
+]
+practice>
